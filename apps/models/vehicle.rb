@@ -7,8 +7,7 @@ class Vehicle < ActiveRecord::Base
 
   def initialize(attributes)
     attributes.each { |key, value| self.send(("#{key}="), value) }
-      @@all << self
-    end
+    @@all << self
   end
 
 end
