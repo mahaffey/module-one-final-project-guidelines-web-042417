@@ -1,5 +1,5 @@
 class Trip < ActiveRecord::Base
-  attr_accessor :price, :miles, :num_of_pass, :pickup_time, :pickup_loc, :dropoff_time, :dropoff_loc
+  attr_accessor :price, :miles, :num_of_pass, :pickup_time, :pickup_loc, :dropoff_time, :dropoff_loc, :driver, :vehicle, :client
   attr_reader :driver_id, :vehicle_id, :client_id
 
   belongs_to :client
@@ -12,9 +12,13 @@ class Trip < ActiveRecord::Base
 
   def initialize(attributes,client_name)
     attributes.each { |key, value| self.send(("#{key}="), value) }
-    Client.find_or_create_by(client_name)
+    #Client.find_or_create_by(client_name)
     @@all << self
     @@active_trips << self
+  end
+
+  def add_or_update(attributes)
+    attributes.each { |key, value| self.send(("#{key}="), value) }
   end
 
   def self.all
@@ -29,4 +33,7 @@ class Trip < ActiveRecord::Base
     @@archived_trips
   end
 
+  # def set_driver=(driver)
+  #   self.driver = driver
+  # end
 end
