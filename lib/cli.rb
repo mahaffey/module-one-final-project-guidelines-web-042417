@@ -33,6 +33,15 @@ class CLI
     client = Client.create(get_client_attributes(name)) if client == nil
     new_trip = Trip.create(get_trip_attributes)
     new_trip.client = client
+    new_trip.driver = Driver.all.sample
+    new_trip.vehicle = Vehicle.all.sample
+    puts "Trip number: #{new_trip.id}."
+    puts "Driver: #{new_trip.driver.name}"
+    puts "Vehicle: #{new_trip.vehicle.color} #{new_trip.vehicle.make} #{new_trip.vehicle.model}"
+    puts "-------------------------------------------------"
+    puts "Press return to go back to the main menu:"
+    puts "-------------------------------------------------"
+    gets.strip
     options
   end
 
@@ -54,15 +63,11 @@ class CLI
     attributes[:email] = gets.strip
     puts "Client address:"
     attributes[:address] = gets.strip
-    # puts "You entered these values:"
-    # attributes.each do |key, value|
-    #   puts "#{key.to_s}: #{value}"
-    # end
     attributes
   end
 
   def get_trip_attributes
-    attributes = {price: nil, miles: nil, num_of_pass: nil, pickup_time: nil, pickup_loc: nil, dropoff_time: nil, dropoff_loc: nil}
+    attributes = {price: nil, miles: nil, num_of_pass: nil, pickup_time: nil, pickup_loc: nil, dropoff_loc: nil}
     please_input_info
     puts "How many passengers:"
     attributes[:num_of_pass] = gets.strip.to_i
@@ -74,6 +79,7 @@ class CLI
     attributes[:dropoff_loc] = gets.strip
     attributes[:price] = rand(45..100)
     attributes[:miles] = rand(1..25)
+    attributes
   end
 
   #2 Options
