@@ -31,12 +31,20 @@ class CLI
     client = Client.find_by({first_name: name[0], last_name: name[1]})
 
     client = Client.create(get_client_attributes(name)) if client == nil
-    get_trip_info(client)
+    new_trip = Trip.create(get_trip_attributes)
+    new_trip.client = client
+  end
+
+  def please_input_info
+    puts "-------------------------------------------------"
+    puts "Please input the following information:"
+    puts "(if information is unavailible simply hit return)"
+    puts "-------------------------------------------------"
   end
 
   def get_client_attributes(name)
     attributes = {first_name: name[0], last_name: name[1], company: nil, phone: nil, email: nil, address: nil }
-    puts "Please input the following information:"
+    please_input_info
     puts "Client company:"
     attributes[:company] = gets.chomp
     puts "Client phone number:"
@@ -53,6 +61,8 @@ class CLI
   end
 
   def get_trip_info
+    please_input_info
+    attributes =
   end
 
   #2 Options
