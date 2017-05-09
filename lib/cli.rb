@@ -99,6 +99,13 @@ class CLI
       #6.5 give user trip ID
 
     # ---- COMING SOON TO AN APP NEAR YOU -----
+
+    #directions = GoogleDirections.new(origin, destination)
+    #drive_time_in_minutes = directions.drive_time_in_minutes
+    #distance_in_miles = directions.distance_in_miles
+    #directions.methods
+    #directions.distance = meters
+    #directions.distance_text.split(" ")[0].to_f
       # create driver (create)
         # request driver
       # create vehicle (create)
