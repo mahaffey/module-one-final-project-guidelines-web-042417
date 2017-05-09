@@ -3,11 +3,11 @@ class Driver < ActiveRecord::Base
   has_many :clients, through: :trips
   has_many :vehicles, through: :trips
 
-  @@all = []
+  #@@all = []
 
-  def initialize(attributes)
-    attributes.each { |key, value| self.send(("#{key}="), value) }
-    @@all << self
-  end
+  # def initialize(attributes)
+  #   attributes.each { |key, value| self.send(("#{key}="), value) }
+  #   @@all << self
+  # end
 
 end

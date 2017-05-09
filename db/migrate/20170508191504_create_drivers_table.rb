@@ -4,7 +4,7 @@ class CreateDriversTable < ActiveRecord::Migration[5.0]
       t.string :name
       t.integer :age
       t.integer :experience
-      t.integer :phone
+      t.string :phone
       t.string :email
       t.string :address
       t.string :lic_state

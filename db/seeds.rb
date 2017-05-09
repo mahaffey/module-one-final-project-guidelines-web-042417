@@ -23,13 +23,13 @@ driver_data = [
 ]
 
 client_data.each do |first_name, last_name, company, phone, email, address|
-  Client.new(first_name: first_name, last_name: last_name, company: company, phone: phone, email: email, address: address)
+  Client.create(first_name: first_name, last_name: last_name, company: company, phone: phone, email: email, address: address)
 end
 
 vehicle_data.each do |lic_plate, year, make, color|
-  Vehicle.new(lic_plate: lic_plate, year: year, make: make, color: color)
+  Vehicle.create(lic_plate: lic_plate, year: year, make: make, color: color)
 end
 
 driver_data.each do |name, age, experience, phone|
-  Driver.new(name: name, age: age, experience: experience, phone: phone)
+  Driver.create(name: name, age: age, experience: experience, phone: phone)
 end

@@ -4,7 +4,7 @@ class CreateClientsTable < ActiveRecord::Migration[5.0]
       t.string :first_name
       t.string :last_name
       t.string :company, default: nil
-      t.integer :phone
+      t.string :phone
       t.string :email
       t.string :address
     end

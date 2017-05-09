@@ -13,19 +13,19 @@
 ActiveRecord::Schema.define(version: 20170508191818) do
 
   create_table "clients", force: :cascade do |t|
-    t.string  "first_name"
-    t.string  "last_name"
-    t.string  "company"
-    t.integer "phone"
-    t.string  "email"
-    t.string  "address"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "company"
+    t.string "phone"
+    t.string "email"
+    t.string "address"
   end
 
   create_table "drivers", force: :cascade do |t|
     t.string  "name"
     t.integer "age"
     t.integer "experience"
-    t.integer "phone"
+    t.string  "phone"
     t.string  "email"
     t.string  "address"
     t.string  "lic_state"
