@@ -11,7 +11,7 @@ class CLI
     puts "2. Modify an existing trip"
     puts "3. Quit"
 
-    case gets.chomp
+    case gets.strip
     when "1"
       schedule_new_trip
     when "2"
@@ -26,13 +26,14 @@ class CLI
 
   def schedule_new_trip
     puts "Enter client full name:"
-    name = gets.chomp.split(" ")
+    name = gets.strip.split(" ")
 
     client = Client.find_by({first_name: name[0], last_name: name[1]})
 
     client = Client.create(get_client_attributes(name)) if client == nil
     new_trip = Trip.create(get_trip_attributes)
     new_trip.client = client
+    options
   end
 
   def please_input_info
@@ -46,13 +47,13 @@ class CLI
     attributes = {first_name: name[0], last_name: name[1], company: nil, phone: nil, email: nil, address: nil }
     please_input_info
     puts "Client company:"
-    attributes[:company] = gets.chomp
+    attributes[:company] = gets.strip
     puts "Client phone number:"
-    attributes[:phone] = gets.chomp
+    attributes[:phone] = gets.strip
     puts "Client email address:"
-    attributes[:email] = gets.chomp
+    attributes[:email] = gets.strip
     puts "Client address:"
-    attributes[:address] = gets.chomp
+    attributes[:address] = gets.strip
     # puts "You entered these values:"
     # attributes.each do |key, value|
     #   puts "#{key.to_s}: #{value}"
@@ -60,9 +61,19 @@ class CLI
     attributes
   end
 
-  def get_trip_info
+  def get_trip_attributes
+    attributes = {price: nil, miles: nil, num_of_pass: nil, pickup_time: nil, pickup_loc: nil, dropoff_time: nil, dropoff_loc: nil}
     please_input_info
-    attributes =
+    puts "How many passengers:"
+    attributes[:num_of_pass] = gets.strip.to_i
+    puts "Pick up time:"
+    attributes[:pickup_time] = gets.strip
+    puts "Pick up address: (Street, Zip)"
+    attributes[:pickup_loc] = gets.strip
+    puts "Drop off address: (Street, Zip)"
+    attributes[:dropoff_loc] = gets.strip
+    attributes[:price] = rand(45..100)
+    attributes[:miles] = rand(1..25)
   end
 
   #2 Options
