@@ -199,8 +199,7 @@ class CLI
     when "2"
      key = :pickup_time
      puts "Enter New Value:"
-     val = gets.strip
-     #add val = time_array
+     val = time_array
     when "3"
      key = :pickup_loc
      puts "Enter New Value:"
