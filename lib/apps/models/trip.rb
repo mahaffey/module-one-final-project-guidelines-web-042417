@@ -9,8 +9,13 @@ class Trip < ActiveRecord::Base
       info = GoogleDirections.new(self.pickup_loc, self.dropoff_loc)
       get_trip_distance_miles(info)
       get_trip_time_minutes(info)
+      get_dropoff_time(info)
       pricing
     end
+  end
+
+  def get_dropoff_time(info)
+    self.dropoff_time = self.pickup_time + get_trip_time_minutes(info)*60
   end
 
   def get_trip_distance_miles(info)
