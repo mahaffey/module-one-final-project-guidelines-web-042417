@@ -1,3 +1,5 @@
+require 'pry'
+
 class CLI
   #1 welcome
   def welcome
@@ -15,7 +17,9 @@ class CLI
     when "1"
       schedule_new_trip
     when "2"
-      modify_or_view_existing_trip
+      seperator_and_text {puts "Enter the trip ID:"}
+      @trip_id = gets.strip.to_i
+      update_or_view_existing_trip
     when "3"
       exit
     else
@@ -123,13 +127,17 @@ class CLI
    Vehicle.create(attributes)
  end
 
- def get_trip_id
-    seperator_and_text {puts "Enter the trip ID"}
-    gets.strip.to_i
-  end
+ # def @trip_id
+ #    puts "Enter the trip ID"
+ #    gets.strip.to_i
+ #  end
 
  def update_or_view_existing_trip
-    seperator_and_text {puts "What would you like to do? (select 1-3)" puts "1. Update an existing trip" puts "2. View an existing trip" puts "3. Back to main menu"}
+    seperator_and_text {puts "What would you like to do? (select 1-3)"
+                        puts "1. Update an existing trip"
+                        puts "2. View an existing trip"
+                        puts "3. Back to main menu"}
+                        #add /n and remove puts
     case gets.strip
     when "1"
       update_trip
@@ -167,23 +175,28 @@ class CLI
     case gets.strip
     when "1"
      key = :num_of_pass
-     get_value_input
+     puts "Enter New Value:"
+     val = gets.strip
     when "2"
      key = :pickup_time
-     get_value_input
+     puts "Enter New Value:"
+     val = gets.strip
+     #add val = time_array
     when "3"
      key = :pickup_loc
-     get_value_input
+     puts "Enter New Value:"
+     val = gets.strip
     when "4"
      key = :dropoff_loc
-     get_value_input
+     puts "Enter New Value:"
+     val = gets.strip
     when "5"
      update_or_view_existing_trip
     else
      puts "Invalid Input: Please Enter 1-5"
      update_trip
     end
-    Trip.all.where("ID = #{get_trip_id}").update("#{key} = #{get_value_input}")
+    Trip.all.where("ID = #{@trip_id}").update(key => val)
     do_you_want_to_continue_updating_trip
  end
 
@@ -200,15 +213,42 @@ class CLI
    end
  end
 
- def get_value_input
-   puts "Enter New Value:"
-   gets.strip
- end
+ # def get_value_input
+ #   puts "Enter New Value:"
+ #   gets.strip
+ # end
 
  def view_trip
-   Trip.all[get_trip_id-1]
-   update_or_view_existing_trip
+  trip = Trip.find(@trip_id)
+  seperator_and_text {puts "Trip Details (Trip ID: #{@trip_id})"}
+  # puts "Driver Name: #{trip.driver.name}"
+  # puts "Vehicle Type: #{trip.vehicle.year} #{trip.vehicle.make} #{trip.vehicle.model}"
+  # puts "Client Name: #{trip.client.name}"
+  puts "Price: #{trip.price_string}"
+  puts "Miles: #{trip.miles}"
+  puts "Number of Passengers: #{trip.num_of_pass}"
+  puts "Pick-Up Time: #{trip.pickup_time}"
+  puts "Pick-Up Location: #{trip.pickup_loc}"
+  puts "Drop-Off Time: #{trip.dropoff_time}"
+  puts "Drop-ff Location: #{trip.dropoff_loc}"
+  update_or_view_existing_trip
  end
+
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
  #2 Options
    # Schedule a trip (create)
@@ -239,5 +279,3 @@ class CLI
      # create vehicle (create)
        # request vehicle
          #attributes???
-
-end
