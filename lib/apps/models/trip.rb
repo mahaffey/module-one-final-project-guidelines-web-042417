@@ -18,11 +18,11 @@ class Trip < ActiveRecord::Base
   end
 
   def get_trip_time_minutes(info)
-    self.estimated_time_from_google_minutes = info.drive_time_in_minutes
+    self.estimated_time_minutes = info.drive_time_in_minutes
   end
 
   def pricing
-    self.price = 5 + self.miles * 2 + self.estimated_time_from_google_minutes
+    self.price = 5 + self.miles * 2 + self.estimated_time_minutes
   end
 
   def price_string
