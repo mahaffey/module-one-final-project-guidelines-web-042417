@@ -157,31 +157,34 @@ class CLI
  # end
 
  def update_trip
-   key = nil
-   puts "What would you like to update? (select 1-5)"
-  attributes = {num_of_pass: "How many passengers", pickup_time: "Pick up time", pickup_loc: "Pick up address: (Street, Zip)", dropoff_loc: "Drop off address: (Street, Zip)"}
-  puts "1. Number of Passengers"
-  puts "2. Pickup Time"
-  puts "3. Pickup Location"
-  puts "4. Dropoff Location"
-  puts "5. Go Back"
-   case gets.strip
-   when "1"
+    key = nil
+    puts "What would you like to update? (select 1-5)"
+    puts "1. Number of Passengers"
+    puts "2. Pickup Time"
+    puts "3. Pickup Location"
+    puts "4. Dropoff Location"
+    puts "5. Go Back"
+    case gets.strip
+    when "1"
      key = :num_of_pass
-   when "2"
+     get_value_input
+    when "2"
      key = :pickup_time
-   when "3"
+     get_value_input
+    when "3"
      key = :pickup_loc
-   when "4"
+     get_value_input
+    when "4"
      key = :dropoff_loc
-   when "5"
+     get_value_input
+    when "5"
      update_or_view_existing_trip
-   else
+    else
      puts "Invalid Input: Please Enter 1-5"
      update_trip
-   end
-   Trip.all.where("ID = #{get_trip_id}").update("#{key} = #{get_value_input}")
-   do_you_want_to_continue_updating_trip
+    end
+    Trip.all.where("ID = #{get_trip_id}").update("#{key} = #{get_value_input}")
+    do_you_want_to_continue_updating_trip
  end
 
  def do_you_want_to_continue_updating_trip
