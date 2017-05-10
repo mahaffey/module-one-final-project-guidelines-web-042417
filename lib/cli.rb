@@ -157,6 +157,24 @@ class CLI
  end
 
  def update_trip
+   puts "What would you like to update? (select 1-5)"
+  attributes = {num_of_pass: "How many passengers", pickup_time: "Pick up time", pickup_loc: "Pick up address: (Street, Zip)", dropoff_loc: "Drop off address: (Street, Zip)"}
+  puts "1. Number of Passengers"
+  puts "2. Pickup Time"
+  puts "3. Pickup Location"
+  puts "4. Dropoff Location"
+  puts "5. Go Back"
+   case gets.strip
+   when "1"
+   when "2"
+   when "3"
+   when "4"
+   when "5"
+     update_or_view_existing_trip
+   else
+     puts "Invalid Input: Please Enter 1-5"
+     update_trip
+   end
    Trip.all.where("ID = #{get_trip_id}").update(updated_attributes)
  end
 
