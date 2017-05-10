@@ -35,50 +35,73 @@ class CLI
     new_trip.client = client
     new_trip.driver = Driver.all.sample
     new_trip.vehicle = Vehicle.all.sample
-    puts "Trip number: #{new_trip.id}."
-    puts "Driver: #{new_trip.driver.name}"
-    puts "Vehicle: #{new_trip.vehicle.color} #{new_trip.vehicle.make} #{new_trip.vehicle.model}"
-    puts "-------------------------------------------------"
-    puts "Press return to go back to the main menu:"
-    puts "-------------------------------------------------"
+    trip_creation_output
     gets.strip
     options
   end
 
-  def please_input_info
+  def trip_creation_output
+    puts "Trip number: #{new_trip.id}."
+    puts "Driver: #{new_trip.driver.name}"
+    puts "Vehicle: #{new_trip.vehicle.color} #{new_trip.vehicle.make} #{new_trip.vehicle.model}"
+    seperator_and_text {puts "Press return to go back to the main menu:"}
+  end
+
+  def seperator_and_text
     puts "-------------------------------------------------"
-    puts "Please input the following information:"
-    puts "(if information is unavailible simply hit return)"
+    yield
     puts "-------------------------------------------------"
   end
 
+
+  #refactored with seperator_and_text - delete
+  # def please_input_info
+  #   puts "-------------------------------------------------"
+  #   puts "Please input the following information:"
+  #   puts "(if information is unavailible simply hit return)"
+  #   puts "-------------------------------------------------"
+  # end
+
   def get_client_attributes(name)
-    attributes = {first_name: name[0], last_name: name[1], company: nil, phone: nil, email: nil, address: nil }
-    please_input_info
-    puts "Client company:"
-    attributes[:company] = gets.strip
-    puts "Client phone number:"
-    attributes[:phone] = gets.strip
-    puts "Client email address:"
-    attributes[:email] = gets.strip
-    puts "Client address:"
-    attributes[:address] = gets.strip
+    attributes = {first_name: name[0], last_name: name[1],
+                  company: "Client company" , phone: "Clients phone number", email: "Client's email address",
+                  address: "Clients home address" }
+
+    seperator_and_text {puts "Please input the following information:"
+                        puts "(if information is unavailible simply hit return)"}
+
+    attributes.drop(2).collect do |key, value|
+      puts "#{value}:"
+      attributes[key] = gets.strip
+    end
+
     attributes
   end
 
+
+
   def get_trip_attributes
-    attributes = {price: nil, miles: nil, num_of_pass: nil, pickup_time: nil, pickup_loc: nil, dropoff_loc: nil}
-    please_input_info
-    puts "How many passengers:"
-    attributes[:num_of_pass] = gets.strip.to_i
-    puts "Pick up time:"
-    attributes[:pickup_time] = gets.strip
-    puts "Pick up address: (Street, Zip)"
-    attributes[:pickup_loc] = gets.strip
-    puts "Drop off address: (Street, Zip)"
-    attributes[:dropoff_loc] = gets.strip
-    attributes[:price] = rand(45..100)
-    attributes[:miles] = rand(1..25)
+    attributes = {num_of_pass: "How many passengers", pickup_time: "Pick up time", pickup_loc: "Pick up address: (Street, Zip)", dropoff_loc: "Drop off address: (Street, Zip)"}
+
+    seperator_and_text {puts "Please input the following information:"
+                        puts "(if information is unavailible simply hit return)"}
+
+    attributes.collect do |key, value|
+      puts "#{value}:"
+      attributes[key] = gets.strip
+    end
+
+
+    #refactor example - delete
+    # puts "How many passengers:"
+    # attributes[:num_of_pass] = gets.strip.to_i
+    # puts "Pick up time:"
+    # attributes[:pickup_time] = gets.strip
+    # puts "Pick up address: (Street, Zip)"
+    # attributes[:pickup_loc] = gets.strip
+    # puts "Drop off address: (Street, Zip)"
+    # attributes[:dropoff_loc] = gets.strip
+
     attributes
   end
 
