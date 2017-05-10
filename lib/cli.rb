@@ -33,16 +33,17 @@ class CLI
     name = gets.strip.split(" ")
     client = Client.find_by({first_name: name[0], last_name: name[1]})
     client = Client.create(get_client_attributes(name)) if client == nil
-    new_trip = Trip.create(get_trip_attributes)
+    new_trip = Trip.new(get_trip_attributes)
     new_trip.client = client
     new_trip.driver = Driver.all.sample
     new_trip.vehicle = Vehicle.all.sample
-    trip_creation_output
+    new_trip.save
+    trip_creation_output(new_trip)
     gets.strip
     options
   end
 
-  def trip_creation_output
+  def trip_creation_output(new_trip)
     puts "Trip number: #{new_trip.id}."
     puts "Driver: #{new_trip.driver.name}"
     puts "Vehicle: #{new_trip.vehicle.color} #{new_trip.vehicle.make} #{new_trip.vehicle.model}"
@@ -71,7 +72,7 @@ class CLI
   end
 
   def get_trip_attributes
-    attributes = {num_of_pass: "How many passengers", pickup_time: "Pick up time: ", pickup_loc: "Pick up address/location: ", dropoff_loc: "Drop off address/location: "}
+    attributes = {num_of_pass: "How many passengers", pickup_time: "Pick up time", pickup_loc: "Pick up address/location", dropoff_loc: "Drop off address/location"}
 
     seperator_and_text {puts "Please input the following information:"
                         puts "(if information is unavailible simply hit return)"}
@@ -85,6 +86,7 @@ class CLI
       end
     end
     attributes
+
   end
 
   def time_array
@@ -239,9 +241,9 @@ class CLI
  def view_trip
   trip = Trip.find(@trip_id)
   seperator_and_text {puts "Trip Details (Trip ID: #{@trip_id})"}
-  # puts "Driver Name: #{trip.driver.name}"
-  # puts "Vehicle Type: #{trip.vehicle.year} #{trip.vehicle.make} #{trip.vehicle.model}"
-  # puts "Client Name: #{trip.client.name}"
+  puts "Driver Name: #{trip.driver.name}"
+  puts "Vehicle Type: #{trip.vehicle.year} #{trip.vehicle.make} #{trip.vehicle.model}"
+  puts "Client Name: #{trip.client.first_name} #{trip.client.last_name}"
   puts "Price: #{trip.price_string}"
   puts "Miles: #{trip.miles}"
   puts "Number of Passengers: #{trip.num_of_pass}"
