@@ -2,25 +2,21 @@ class DriverCLI
 
   def driver_prompt
     puts "Enter new driver's information:"
-    get_driver_attributes_and_creates
-    puts "Driver submitted"
+    new_driver = get_driver_attributes_and_create
+    puts "A new driver has been created"
+    puts "Driver ID number: #{new_driver.id}"
+    puts "Driver name: #{new_driver.name}"
   end
 
 
-  def get_driver_attributes_and_creates
-    full_names = {name: "Name",
-                  age: "Age",
-                  experience: "Years of Experience",
-                  phone: "Phone Number",
-                  email: "Email Address",
-                  address: "Home Address",
-                  lic_state: "License State",
-                  lic_number: "License Number",
-                  lic_class: "License Class"}
+  def get_driver_attributes_and_create
+    attributes = {name: "Name of driver", age: "Age of driver",
+                  experience: "Years of experience driving",
+                  phone: "Driver phone number", email: "Driver's email address",
+                  address: "Driver's home address", lic_state: "License state",
+                  lic_number: "License number", lic_class: "License class"}
 
-   attributes = {}
-
-   full_names.each do |key, value|
+   attributes.collect do |key, value|
      puts "#{value}:"
      attributes[key] = gets.strip
    end
