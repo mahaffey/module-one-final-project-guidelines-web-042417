@@ -143,20 +143,21 @@ class CLI
     end
  end
 
- def updated_attributes
-   attributes = {num_of_pass: "How many passengers", pickup_time: "Pick up time", pickup_loc: "Pick up address: (Street, Zip)", dropoff_loc: "Drop off address: (Street, Zip)"}
-
-   seperator_and_text {puts "Please input the following information:"
-                       puts "(if information is unavailible simply hit return)"}
-
-   attributes.collect do |key, value|
-     puts "#{value}:"
-     attributes[key] = gets.strip
-   end
-   attributes
- end
+ # def updated_attributes
+ #   attributes = {num_of_pass: "How many passengers", pickup_time: "Pick up time", pickup_loc: "Pick up address: (Street, Zip)", dropoff_loc: "Drop off address: (Street, Zip)"}
+ #
+ #   seperator_and_text {puts "Please input the following information:"
+ #                       puts "(if information is unavailible simply hit return)"}
+ #
+ #   attributes.collect do |key, value|
+ #     puts "#{value}:"
+ #     attributes[key] = gets.strip
+ #   end
+ #   attributes
+ # end
 
  def update_trip
+   attributes_update = {}
    puts "What would you like to update? (select 1-5)"
   attributes = {num_of_pass: "How many passengers", pickup_time: "Pick up time", pickup_loc: "Pick up address: (Street, Zip)", dropoff_loc: "Drop off address: (Street, Zip)"}
   puts "1. Number of Passengers"
@@ -175,7 +176,7 @@ class CLI
      puts "Invalid Input: Please Enter 1-5"
      update_trip
    end
-   Trip.all.where("ID = #{get_trip_id}").update(updated_attributes)
+   Trip.all.where("ID = #{get_trip_id}").update(attributes_update)
  end
 
  def view_trip
