@@ -71,16 +71,35 @@ class CLI
   end
 
   def get_trip_attributes
-    attributes = {num_of_pass: "How many passengers", pickup_time: "Pick up time", pickup_loc: "Pick up address: (Street, Zip)", dropoff_loc: "Drop off address: (Street, Zip)"}
+    attributes = {num_of_pass: "How many passengers", pickup_time: "Pick up time: ", pickup_loc: "Pick up address/location: ", dropoff_loc: "Drop off address/location: "}
 
     seperator_and_text {puts "Please input the following information:"
                         puts "(if information is unavailible simply hit return)"}
 
     attributes.collect do |key, value|
       puts "#{value}:"
-      attributes[key] = gets.strip
+      if key == :pickup_time
+        attributes[key] = time_array
+      else
+        attributes[key] = gets.strip
+      end
     end
     attributes
+  end
+
+  def time_array
+    time_array = []
+    puts "Enter the year: "
+    time_array << gets.strip.to_i
+    puts "Enter the month: "
+    time_array << gets.strip.to_i
+    puts "Enter the day: "
+    time_array << gets.strip.to_i
+    puts "Enter the hour (24HR): "
+    time_array << gets.strip.to_i
+    puts "Enter the minute: "
+    time_array << gets.strip.to_i
+    Time.utc(*time_array)
   end
 
   def driver_prompt
