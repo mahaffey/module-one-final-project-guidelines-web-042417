@@ -77,8 +77,6 @@ class CLI
     attributes[:pickup_loc] = gets.strip
     puts "Drop off address: (Street, Zip)"
     attributes[:dropoff_loc] = gets.strip
-    attributes[:price] = rand(45..100)
-    attributes[:miles] = rand(1..25)
     attributes
   end
 

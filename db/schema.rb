@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170508191818) do
+ActiveRecord::Schema.define(version: 20170510153337) do
 
   create_table "clients", force: :cascade do |t|
     t.string "first_name"
@@ -44,8 +44,9 @@ ActiveRecord::Schema.define(version: 20170508191818) do
     t.string   "pickup_loc"
     t.datetime "dropoff_time"
     t.string   "dropoff_loc"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.integer  "estimated_time_minutes"
     t.index ["client_id"], name: "index_trips_on_client_id"
     t.index ["driver_id"], name: "index_trips_on_driver_id"
     t.index ["vehicle_id"], name: "index_trips_on_vehicle_id"
