@@ -78,10 +78,7 @@ class CLI
     attributes
   end
 
-
-
   def get_trip_attributes
-<<<<<<< HEAD
     attributes = {num_of_pass: "How many passengers", pickup_time: "Pick up time", pickup_loc: "Pick up address: (Street, Zip)", dropoff_loc: "Drop off address: (Street, Zip)"}
 
     seperator_and_text {puts "Please input the following information:"
@@ -91,7 +88,6 @@ class CLI
       puts "#{value}:"
       attributes[key] = gets.strip
     end
-
 
     #refactor example - delete
     # puts "How many passengers:"
@@ -103,18 +99,7 @@ class CLI
     # puts "Drop off address: (Street, Zip)"
     # attributes[:dropoff_loc] = gets.strip
 
-=======
-    attributes = {price: nil, miles: nil, num_of_pass: nil, pickup_time: nil, pickup_loc: nil, dropoff_loc: nil}
-    please_input_info
-    puts "How many passengers:"
-    attributes[:num_of_pass] = gets.strip.to_i
-    puts "Pick up time:"
-    attributes[:pickup_time] = gets.strip
-    puts "Pick up address: (Street, Zip)"
-    attributes[:pickup_loc] = gets.strip
-    puts "Drop off address: (Street, Zip)"
-    attributes[:dropoff_loc] = gets.strip
->>>>>>> pricing-algo
+
     attributes
   end
 
@@ -197,7 +182,7 @@ class CLI
    end
 
    Vehicle.create(attributes)
-   
+
  end
 
 end
