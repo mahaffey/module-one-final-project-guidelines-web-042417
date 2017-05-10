@@ -98,7 +98,6 @@ class CLI
     Time.utc(*time_array)
   end
 
-
   def driver_prompt
     puts "Enter new driver's information:"
     new_driver = get_driver_attributes_and_create
