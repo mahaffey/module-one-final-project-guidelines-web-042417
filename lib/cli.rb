@@ -8,7 +8,7 @@ class CLI
   end
 
   def main_menu
-    @test = 0
+    @trip_switch = 0
     seperator_and_text{puts "What would you like to do? (select 1-3)"}
     puts "1. Create new client"
     puts "2. Schedule a new trip"
@@ -39,7 +39,7 @@ class CLI
   end
 
   def schedule_new_trip
-    @test = 1
+    @trip_switch = 1
     client = client_check
     new_trip = get_trip_attributes_and_create
     new_trip.update(client: client)
@@ -70,7 +70,7 @@ class CLI
     client = Client.find_by({first_name: name[0], last_name: name[1]})
     if client
       puts "This client already exists. Their client id is #{client.id}."
-      main_menu if @test == 0
+      main_menu if @trip_switch == 0
       client
     else
       client_prompt(name)
@@ -84,7 +84,7 @@ class CLI
       puts "A new client has been added to your database"
       puts "New Client ID: #{client_new.id}"
       puts "Client name: #{name}"
-      if @test == 0
+      if @trip_switch == 0
         seperator_and_text {puts "Press return to go back to the main menu:"}
         gets.strip
         main_menu
