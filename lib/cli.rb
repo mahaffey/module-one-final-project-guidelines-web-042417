@@ -105,7 +105,7 @@ class CLI
   end
 
   def get_trip_attributes_and_create
-    attributes = {num_of_pass: "How many passengers", pickup_time: "Pick up date and time", pickup_loc: "Pick up address/location", dropoff_loc: "Drop off address/location"}
+    attributes = {num_of_pass: "How many passengers", pickup_time: "Please input date and time in the following format(24 hour time): YYYY-MM-DD-HH-mm", pickup_loc: "Pick up address/location", dropoff_loc: "Drop off address/location"}
 
     seperator_and_text {input_info}
 
@@ -128,19 +128,15 @@ class CLI
   end
 
   def time_array
-    dt_array = []
-    what_array = ["year(YYYY)", "month(MM)", "day(DD)", "hour(HH,24HR)", "minute(mm)"]
-    what_array.each do |value|
-      puts "Enter the #{value}: "
-      dt_array << gets.strip.to_i
-    end
+    dt_array = gets.strip.split("-")
+    alpha = ("a".."z").to_a
     dt_array.each do |n|
-      if n.to_i == 0
+      if n.split("").any? { |x| alpha.include?(x) }
         puts "Input valid time:"
-        dt_array.clear
         time_array
       end
     end
+    dt_array = dt_array.collect { |n| n.to_i }
     Time.utc(*dt_array)
   end
 
@@ -304,7 +300,7 @@ class CLI
   puts "Pick-Up Time: #{trip.pickup_time}"
   puts "Pick-Up Location: #{trip.pickup_loc}"
   puts "Drop-Off Time: #{trip.dropoff_time}"
-  puts "Drop-ff Location: #{trip.dropoff_loc}"
+  puts "Drop-off Location: #{trip.dropoff_loc}"
   update_or_view_existing_trip
  end
 
