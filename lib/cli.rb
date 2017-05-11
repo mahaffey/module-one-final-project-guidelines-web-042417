@@ -94,8 +94,9 @@ class CLI
 
   def get_client_attributes_and_create(name)
       attributes = {first_name: name[0], last_name: name[1],
-                    company: "Client company" , phone: "Clients phone number", email: "Client's email address",
-                    address: "Clients home address" }
+                    company: "Client's company" , phone: "Client's phone number", email: "Client's email address",
+                    address: "Client's home address" }
+
       attributes.drop(2).collect do |key, value|
         puts "#{value}:"
         attributes[key] = gets.strip
@@ -111,22 +112,36 @@ class CLI
     attributes.collect do |key, value|
       puts "#{value}:"
       if key == :pickup_time
-        attributes[key] = time_array
+        input = time_array
+      elsif key == :age || key == :experience || key == :lic_number
+        input = gets.strip
+        while input.to_i == 0
+          puts "Please input an integer:"
+          input = gets.strip
+        end
       else
-        attributes[key] = gets.strip
+        input = gets.strip
       end
+      attributes[key] = input
     end
     Trip.create(attributes)
   end
 
   def time_array
-    time_array = []
-    what_array = ["year", "month", "day", "hour(24HR)", "minute"]
+    dt_array = []
+    what_array = ["year(YYYY)", "month(MM)", "day(DD)", "hour(HH,24HR)", "minute(mm)"]
     what_array.each do |value|
       puts "Enter the #{value}: "
-      time_array << gets.strip.to_i
+      dt_array << gets.strip.to_i
     end
-    Time.utc(*time_array)
+    dt_array.each do |n|
+      if n.to_i == 0
+        puts "Input valid time:"
+        dt_array.clear
+        time_array
+      end
+    end
+    Time.utc(*dt_array)
   end
 
   def driver_prompt
@@ -136,7 +151,7 @@ class CLI
     puts "New Driver ID: #{new_driver.id}"
     puts "Driver name: #{new_driver.name}"
     seperator_and_text {puts "Press return to go back to the main menu:"}
-    get.strip
+    gets.strip
     main_menu
   end
 
@@ -144,7 +159,7 @@ class CLI
     attributes = {
       name: "Name of driver", age: "Age of driver",
       experience: "Years of experience driving",
-      phone: "Driver phone number", email: "Driver's email address",
+      phone: "Driver's phone number", email: "Driver's email address",
       address: "Driver's home address", lic_state: "License state",
       lic_number: "License number", lic_class: "License class"
     }
@@ -153,7 +168,14 @@ class CLI
 
     attributes.collect do |key, value|
       puts "#{value}:"
-      attributes[key] = gets.strip
+      input = gets.strip
+      if key == :age || key == :experience || key == :lic_number
+        while input.to_i == 0
+          puts "Please input an integer:"
+          input = gets.strip
+        end
+      end
+      attributes[key] = input
     end
     Driver.create(attributes)
   end
@@ -180,7 +202,14 @@ class CLI
 
     attributes.collect do |key, value|
       puts "#{value}:"
-      attributes[key] = gets.strip
+      input = gets.strip
+      if key == :year || key == :mileage || key == :seats
+        while input.to_i == 0
+          puts "Please input an integer:"
+          input = gets.strip
+        end
+      end
+      attributes[key] = input
     end
     Vehicle.create(attributes)
  end
@@ -266,8 +295,8 @@ class CLI
  def view_trip
   trip = Trip.find(@trip_id)
   seperator_and_text {puts "Trip Details (Trip ID: #{@trip_id})"}
-  puts "Driver Name: #{trip.driver.name}"
-  puts "Vehicle Type: #{trip.vehicle.year} #{trip.vehicle.make} #{trip.vehicle.model}"
+  puts "Driver Name: #{trip.driver.name}" if trip.driver
+  puts "Vehicle Type: #{trip.vehicle.year} #{trip.vehicle.make} #{trip.vehicle.model}" if trip.vehicle
   puts "Client Name: #{trip.client.first_name} #{trip.client.last_name}"
   puts "Price: #{trip.price_string}"
   puts "Miles: #{trip.miles}"
