@@ -1,35 +1,40 @@
 class CLI
+  include Runner
+
   def welcome
-    puts "Welcome to the cabbie dispatch app 0.1"
-    options
+    puts "\e[H\e[2J"
+    puts "Welcome to the cabbie dispatch app 0.2"
+    main_menu
   end
 
-  def options
+  def main_menu
     @test = 0
-    puts "What would you like to do? (select 1-3)"
-    puts "1. Create new client" #call client_check
-    puts "1. Schedule a new trip"
-    puts "2. Update or View an existing trip"
-    puts "3. Add new driver to database"
-    puts "4. Add new vehicle to database"
-    puts "5. Quit"
+    seperator_and_text{puts "What would you like to do? (select 1-3)"}
+    puts "1. Create new client"
+    puts "2. Schedule a new trip"
+    puts "3. Update or View an existing trip"
+    puts "4. Add new driver to database"
+    puts "5. Add new vehicle to database"
+    puts "6. Quit"
 
     case gets.strip
     when "1"
-      schedule_new_trip
+      client_check
     when "2"
+      schedule_new_trip
+    when "3"
       seperator_and_text {puts "Enter the trip ID:"}
       @trip_id = gets.strip.to_i
       update_or_view_existing_trip
-    when "3"
-      driver_prompt
     when "4"
-      vehicle_prompt
+      driver_prompt
     when "5"
+      vehicle_prompt
+    when "6"
       exit
     else
       puts "Invalid Input: Please Enter 1-3"
-      options
+      main_menu
     end
   end
 
@@ -42,16 +47,15 @@ class CLI
     seperator_and_text {puts "To add driver or vehicle now select 'Update or View an existing trip' from the main menu then choose to 'Update an existing trip'"
     puts "Press return to go back to the main menu:"}
     gets.strip
-    options
+    main_menu
   end
 
   def trip_creation_output(new_trip)
     puts "Trip number: #{new_trip.id}"
     seperator_and_text {puts "Trip Details"}
-    case new_trip.num_of_pass
-    when > 2
+    if new_trip.num_of_pass > 2
       x = "and #{new_trip.num_of_pass - 1} friends "
-    when 2
+    elsif new_trip.num_of_pass = 2
       x = "and 1 friend "
     else
       x = ""
@@ -60,29 +64,22 @@ class CLI
     puts "Your trip should take approximately #{new_trip.estimated_time_minutes} minutes. This should get you to your destination around #{new_trip.dropoff_time.hour}:#{new_trip.dropoff_time.min}"
   end
 
-  def seperator_and_text
-    puts "-------------------------------------------------"
-    yield
-    puts "-------------------------------------------------"
-  end
-
   def client_check
     puts "Enter client full name:"
     name = gets.strip.split(" ")
     client = Client.find_by({first_name: name[0], last_name: name[1]})
     if client
       puts "This client already exists. Their client id is #{client.id}."
-      options if @test == 0
+      main_menu if @test == 0
       client
     else
-      client_prompt
+      client_prompt(name)
     end
   end
 
-  def client_prompt
+  def client_prompt(name)
       seperator_and_text{puts "Client not found in database."
-                         puts "Please input the following information:"
-                         puts "(if information is unavailible simply hit return)"}
+                         input_info}
       client_new = get_client_attributes_and_create(name)
       puts "A new client has been added to your database"
       puts "New Client ID: #{client_new.id}"
@@ -90,7 +87,7 @@ class CLI
       if @test == 0
         seperator_and_text {puts "Press return to go back to the main menu:"}
         gets.strip
-        options
+        main_menu
       end
       client_new
   end
@@ -99,10 +96,6 @@ class CLI
       attributes = {first_name: name[0], last_name: name[1],
                     company: "Client company" , phone: "Clients phone number", email: "Client's email address",
                     address: "Clients home address" }
-
-      seperator_and_text {puts "Please input the following information:"
-                          puts "(if information is unavailible simply hit return)"}
-
       attributes.drop(2).collect do |key, value|
         puts "#{value}:"
         attributes[key] = gets.strip
@@ -113,8 +106,7 @@ class CLI
   def get_trip_attributes_and_create
     attributes = {num_of_pass: "How many passengers", pickup_time: "Pick up date and time", pickup_loc: "Pick up address/location", dropoff_loc: "Drop off address/location"}
 
-    seperator_and_text {puts "Please input the following information:"
-                        puts "(if information is unavailible simply hit return)"}
+    seperator_and_text {input_info}
 
     attributes.collect do |key, value|
       puts "#{value}:"
@@ -145,7 +137,7 @@ class CLI
     puts "Driver name: #{new_driver.name}"
     seperator_and_text {puts "Press return to go back to the main menu:"}
     get.strip
-    options
+    main_menu
   end
 
   def get_driver_attributes_and_create
@@ -156,11 +148,14 @@ class CLI
       address: "Driver's home address", lic_state: "License state",
       lic_number: "License number", lic_class: "License class"
     }
-   attributes.collect do |key, value|
-     puts "#{value}:"
-     attributes[key] = gets.strip
-   end
-   Driver.create(attributes)
+
+    seperator_and_text {input_info}
+
+    attributes.collect do |key, value|
+      puts "#{value}:"
+      attributes[key] = gets.strip
+    end
+    Driver.create(attributes)
   end
 
   def vehicle_prompt
@@ -170,7 +165,7 @@ class CLI
     puts "New Vehicle ID: #{vehicle_new.id}"
     seperator_and_text {puts "Press return to go back to the main menu:"}
     gets.strip
-    options
+    main_menu
   end
 
   def get_vehicle_attributes_and_create
@@ -180,11 +175,14 @@ class CLI
       seats: "How many seats", mileage: "Current mileage",
       type_of_veh: "Type of vehicle", veh_class: "License class required to drive"
     }
-   attributes.collect do |key, value|
-     puts "#{value}:"
-     attributes[key] = gets.strip
-   end
-   Vehicle.create(attributes)
+
+    seperator_and_text {input_info}
+
+    attributes.collect do |key, value|
+      puts "#{value}:"
+      attributes[key] = gets.strip
+    end
+    Vehicle.create(attributes)
  end
 
  def update_or_view_existing_trip
@@ -192,14 +190,13 @@ class CLI
                         puts "1. Update an existing trip"
                         puts "2. View an existing trip"
                         puts "3. Back to main menu"}
-                        #add /n and remove puts
     case gets.strip
     when "1"
       update_trip
     when "2"
       view_trip
     when "3"
-      options
+      main_menu
     else
       puts "Invalid Input: Please Enter 1-3"
       update_or_view_existing_trip
@@ -259,7 +256,7 @@ class CLI
    when "y" || "Y"
      update_trip
    when "n" || "N"
-     options
+     main_menu
    else
      puts "Invalid Input: Please Enter y or n"
      do_you_want_to_continue_updating_trip
@@ -283,42 +280,3 @@ class CLI
  end
 
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   #3 create/retrieve client by name
-     #if client does not exist
-       #4 get client attributes
-         #5a create client
-     # if client exists
-       #5b find client by name
-
-     #6 initialize create a trip with found/created client
-     #6.5 give user trip ID
-
-   # ---- COMING SOON TO AN APP NEAR YOU -----
-
-   #directions = GoogleDirections.new(origin, destination)
-   #drive_time_in_minutes = directions.drive_time_in_minutes
-   #distance_in_miles = directions.distance_in_miles
-   #directions.methods
-   #directions.distance = meters
-   #directions.distance_text.split(" ")[0].to_f
-     # create driver (create)
-       # request driver
-     # create vehicle (create)
-       # request vehicle
-         #attributes???
