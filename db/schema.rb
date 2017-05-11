@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170510153337) do
+ActiveRecord::Schema.define(version: 20170511140355) do
 
   create_table "clients", force: :cascade do |t|
     t.string "first_name"
@@ -60,7 +60,7 @@ ActiveRecord::Schema.define(version: 20170510153337) do
     t.string  "color"
     t.integer "seats"
     t.integer "mileage"
-    t.string  "type"
+    t.string  "type_of_veh"
     t.string  "veh_class"
   end
 

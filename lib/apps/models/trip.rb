@@ -31,7 +31,7 @@ class Trip < ActiveRecord::Base
   end
 
   def price_string
-    "$ #{self.price}"
+    "$#{self.price}0"
   end
 
 end
