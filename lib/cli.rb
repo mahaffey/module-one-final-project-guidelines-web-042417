@@ -9,6 +9,7 @@ class CLI
 
   def main_menu
     @trip_switch = 0
+    #controls return of options 1 - 2 on creating client and scheduling trip
     seperator_and_text{puts "What would you like to do? (select 1-3)"}
     puts "1. Create new client"
     puts "2. Schedule a new trip"
@@ -38,32 +39,7 @@ class CLI
     end
   end
 
-  def schedule_new_trip
-    @trip_switch = 1
-    client = client_check
-    new_trip = get_trip_attributes_and_create
-    new_trip.update(client: client)
-    trip_creation_output(new_trip)
-    seperator_and_text {puts "To add driver or vehicle now select 'Update or View an existing trip' from the main menu then choose to 'Update an existing trip'"
-    puts "Press return to go back to the main menu:"}
-    gets.strip
-    main_menu
-  end
-
-  def trip_creation_output(new_trip)
-    puts "Trip number: #{new_trip.id}"
-    seperator_and_text {puts "Trip Details"}
-    if new_trip.num_of_pass > 2
-      x = "and #{new_trip.num_of_pass - 1} friends "
-    elsif new_trip.num_of_pass = 2
-      x = "and 1 friend "
-    else
-      x = ""
-    end
-    puts "Taking #{new_trip.client.first_name} #{x}from #{new_trip.pickup_loc} to #{new_trip.dropoff_loc}."
-    puts "Your trip should take approximately #{new_trip.estimated_time_minutes} minutes. This should get you to your destination around #{new_trip.dropoff_time.hour}:#{new_trip.dropoff_time.min}"
-  end
-
+  #when 1 or 2 check client when creating a client of trip
   def client_check
     puts "Enter client full name:"
     name = gets.strip.split(" ")
@@ -92,6 +68,7 @@ class CLI
       client_new
   end
 
+  #when 1 or 2, when client doesn't exist client, client is created
   def get_client_attributes_and_create(name)
       attributes = {first_name: name[0], last_name: name[1],
                     company: "Client's company" , phone: "Client's phone number", email: "Client's email address",
@@ -102,6 +79,32 @@ class CLI
         attributes[key] = gets.strip
       end
       Client.create(attributes)
+  end
+
+  def schedule_new_trip
+    @trip_switch = 1
+    client = client_check
+    new_trip = get_trip_attributes_and_create
+    new_trip.update(client: client)
+    trip_creation_output(new_trip)
+    seperator_and_text {puts "To add driver or vehicle now select 'Update or View an existing trip' from the main menu then choose to 'Update an existing trip'"
+    puts "Press return to go back to the main menu:"}
+    gets.strip
+    main_menu
+  end
+
+  def trip_creation_output(new_trip)
+    puts "Trip number: #{new_trip.id}"
+    seperator_and_text {puts "Trip Details"}
+    if new_trip.num_of_pass > 2
+      x = "and #{new_trip.num_of_pass - 1} friends "
+    elsif new_trip.num_of_pass = 2
+      x = "and 1 friend "
+    else
+      x = ""
+    end
+    puts "Taking #{new_trip.client.first_name} #{x}from #{new_trip.pickup_loc} to #{new_trip.dropoff_loc}."
+    puts "Your trip should take approximately #{new_trip.estimated_time_minutes} minutes. This should get you to your destination around #{new_trip.dropoff_time.hour}:#{new_trip.dropoff_time.min}"
   end
 
   def get_trip_attributes_and_create
@@ -126,6 +129,58 @@ class CLI
     end
     Trip.create(attributes)
   end
+
+
+
+  # def client_prompt(name)
+  #     seperator_and_text{puts "Client not found in database."
+  #                        input_info}
+  #     client_new = get_client_attributes_and_create(name)
+  #     puts "A new client has been added to your database"
+  #     puts "New Client ID: #{client_new.id}"
+  #     puts "Client name: #{name}"
+  #     if @trip_switch == 0
+  #       seperator_and_text {puts "Press return to go back to the main menu:"}
+  #       gets.strip
+  #       main_menu
+  #     end
+  #     client_new
+  # end
+
+  # def get_client_attributes_and_create(name)
+  #     attributes = {first_name: name[0], last_name: name[1],
+  #                   company: "Client's company" , phone: "Client's phone number", email: "Client's email address",
+  #                   address: "Client's home address" }
+  #
+  #     attributes.drop(2).collect do |key, value|
+  #       puts "#{value}:"
+  #       attributes[key] = gets.strip
+  #     end
+  #     Client.create(attributes)
+  # end
+
+  # def get_trip_attributes_and_create
+  #   attributes = {num_of_pass: "How many passengers", pickup_time: "Please input date and time in the following format(24 hour time): YYYY-MM-DD-HH-mm", pickup_loc: "Pick up address/location", dropoff_loc: "Drop off address/location"}
+  #
+  #   seperator_and_text {input_info}
+  #
+  #   attributes.collect do |key, value|
+  #     puts "#{value}:"
+  #     if key == :pickup_time
+  #       input = time_array
+  #     elsif key == :age || key == :experience || key == :lic_number
+  #       input = gets.strip
+  #       while input.to_i == 0
+  #         puts "Please input an integer:"
+  #         input = gets.strip
+  #       end
+  #     else
+  #       input = gets.strip
+  #     end
+  #     attributes[key] = input
+  #   end
+  #   Trip.create(attributes)
+  # end
 
   def time_array
     dt_array = gets.strip.split("-")
