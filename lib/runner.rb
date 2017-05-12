@@ -11,11 +11,11 @@ module Runner
   end
 
   def not_valid
-    puts "Invalid Input: "
+    puts "Invalid Input: ".colorize(:red)
     yield
   end
 
   def press_return
-    puts "Press return to go back to the main menu:"
+    puts "Press return to go back to the main menu:".colorize(:green)
   end
 end
