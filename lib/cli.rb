@@ -3,14 +3,14 @@ class CLI
 
   def welcome
     puts "\e[H\e[2J"
-    puts "Welcome to the cabbie dispatch app 0.2"
+    puts "Welcome to the cabbie dispatch app 0.2".colorize(:yellow)
     main_menu
   end
 
   def main_menu
     @trip_switch = 0
     #controls return of options 1 - 2 on creating client and scheduling trip
-    seperator_and_text{puts "What would you like to do? (select 1-6)"}
+    seperator_and_text{puts "What would you like to do? (select 1-6)".colorize(:green)}
     puts "1. Create new client"
     puts "2. Schedule a new trip"
     puts "3. Update or View an existing trip"
@@ -28,7 +28,7 @@ class CLI
     when "2"
       schedule_new_trip
     when "3"
-      seperator_and_text {puts "Enter the trip ID:"}
+      seperator_and_text {puts "Enter the trip ID:".colorize(:green)}
       @trip_id = gets.strip.to_i
       update_or_view_existing_trip
     when "4"
@@ -46,18 +46,18 @@ class CLI
     when "10"
       exit
     else
-      puts "Invalid Input: Please Enter 1-9"
+      puts "Invalid Input: Please Enter 1-9".colorize(:red)
       main_menu
     end
   end
 
   #when 1 or 2 check client when creating a client of trip
   def client_check
-    puts "Enter client full name:"
+    puts "Enter client full name:".colorize(:green)
     name = gets.strip.split(" ")
     client = Client.find_by({first_name: name[0], last_name: name[1]})
     if client
-      puts "This client already exists. Their client id is #{client.id}."
+      puts "This client already exists. Their client id is #{client.id}.".colorize(:green)
       main_menu if @trip_switch == 0
       client
     else
@@ -66,14 +66,14 @@ class CLI
   end
 
   def client_prompt(name)
-      seperator_and_text{puts "Client not found in database."
+      seperator_and_text{puts "Client not found in database.".colorize(:yellow)
                          input_info}
       client_new = get_client_attributes_and_create(name)
-      puts "A new client has been added to your database"
+      puts "A new client has been added to your database".colorize(:green)
       puts "New Client ID: #{client_new.id}"
       puts "Client name: #{name}"
       if @trip_switch == 0
-        seperator_and_text {puts "Press return to go back to the main menu:"}
+        seperator_and_text {puts "Press return to go back to the main menu:".colorize(:green)}
         gets.strip
         main_menu
       end
@@ -100,7 +100,7 @@ class CLI
     new_trip.update(client: client)
     trip_creation_output(new_trip)
     seperator_and_text {puts "To add driver or vehicle now select 'Update or View an existing trip' from the main menu then choose to 'Update an existing trip'"
-    puts "Press return to go back to the main menu:"}
+    puts "Press return to go back to the main menu:".colorize(:green)}
     gets.strip
     main_menu
   end
@@ -117,7 +117,7 @@ class CLI
       elsif key == :age || key == :experience || key == :lic_number
         input = gets.strip
         while input.to_i == 0
-          puts "Please input an integer:"
+          puts "Please input an integer:".colorize(:red)
           input = gets.strip
         end
       else
@@ -133,7 +133,7 @@ class CLI
     alpha = ("a".."z").to_a
     dt_array.each do |n|
       if n.split("").any? { |x| alpha.include?(x) }
-        puts "Input valid time:"
+        puts "Input valid time:".colorize(:red)
         time_array
       end
     end
@@ -142,7 +142,7 @@ class CLI
   end
 
   def trip_creation_output(new_trip)
-    puts "Trip number: #{new_trip.id}"
+    puts "Trip number: #{new_trip.id}".colorize(:green)
     seperator_and_text {puts "Trip Details"}
     if new_trip.num_of_pass > 2
       x = "and #{new_trip.num_of_pass - 1} friends "
@@ -169,7 +169,7 @@ class CLI
      when "3"
        main_menu
      else
-       puts "Invalid Input: Please Enter 1-3"
+       puts "Invalid Input: Please Enter 1-3".colorize(:red)
        update_or_view_existing_trip
      end
   end
@@ -214,7 +214,7 @@ class CLI
      when "7"
       update_or_view_existing_trip
      else
-      puts "Invalid Input: Please Enter 1-5"
+      puts "Invalid Input: Please Enter 1-5".colorize(:red)
       update_trip
      end
      Trip.all.where("ID = #{@trip_id}").update(key => val)
@@ -229,7 +229,7 @@ class CLI
     when "n" || "N"
       main_menu
     else
-      puts "Invalid Input: Please Enter y or n"
+      puts "Invalid Input: Please Enter y or n".colorize(:red)
       do_you_want_to_continue_updating_trip
     end
   end
@@ -247,7 +247,7 @@ class CLI
     puts "A new driver has been created"
     puts "New Driver ID: #{new_driver.id}"
     puts "Driver name: #{new_driver.name}"
-    seperator_and_text {puts "Press return to go back to the main menu:"}
+    seperator_and_text {puts "Press return to go back to the main menu:".colorize(:green)}
     gets.strip
     main_menu
   end
@@ -268,7 +268,7 @@ class CLI
       input = gets.strip
       if key == :age || key == :experience || key == :lic_number
         while input.to_i == 0
-          puts "Please input an integer:"
+          puts "Please input an integer:".colorize(:red)
           input = gets.strip
         end
       end
@@ -283,7 +283,7 @@ class CLI
     vehicle_new = get_vehicle_attributes_and_create
     puts "A new vehicle has been added to the garage"
     puts "New Vehicle ID: #{vehicle_new.id}"
-    seperator_and_text {puts "Press return to go back to the main menu:"}
+    seperator_and_text {puts "Press return to go back to the main menu:".colorize(:green)}
     gets.strip
     main_menu
   end
@@ -303,7 +303,7 @@ class CLI
       input = gets.strip
       if key == :year || key == :mileage || key == :seats
         while input.to_i == 0
-          puts "Please input an integer:"
+          puts "Please input an integer:".colorize(:red)
           input = gets.strip
         end
       end
@@ -313,93 +313,93 @@ class CLI
  end
 
 #when 6, list all of the trips in the database
-def list_trips
-  Trip.all.each do |trip|
-    view_trip_template(trip)
+  def list_trips
+    Trip.all.each do |trip|
+      view_trip_template(trip)
+    end
+    seperator_and_text {puts "Press return to go back to the main menu:".colorize(:green)}
+    gets.strip
+    main_menu
   end
-  seperator_and_text {puts "Press return to go back to the main menu:"}
-  gets.strip
-  main_menu
-end
 
-def view_trip_template(trip)
- seperator_and_text {puts "Trip Details (Trip ID: #{trip.id})"}
- puts "Driver Name: #{trip.driver.name}" if trip.driver
- puts "Vehicle Type: #{trip.vehicle.year} #{trip.vehicle.make} #{trip.vehicle.model}" if trip.vehicle
- puts "Client Name: #{trip.client.first_name} #{trip.client.last_name}"
- puts "Price: #{trip.price_string}"
- puts "Miles: #{trip.miles}"
- puts "Number of Passengers: #{trip.num_of_pass}"
- puts "Pick-Up Time: #{trip.pickup_time}"
- puts "Pick-Up Location: #{trip.pickup_loc}"
- puts "Drop-Off Time: #{trip.dropoff_time}"
- puts "Drop-off Location: #{trip.dropoff_loc}"
-end
-
-#when 7, list all of the clients in the database
-def list_clients
-  Client.all.each do |client|
-    view_client_template(client)
+  def view_trip_template(trip)
+   seperator_and_text {puts "Trip Details (Trip ID: #{trip.id})".colorize(:green)}
+   puts "Driver Name: #{trip.driver.name}" if trip.driver
+   puts "Vehicle Type: #{trip.vehicle.year} #{trip.vehicle.make} #{trip.vehicle.model}" if trip.vehicle
+   puts "Client Name: #{trip.client.first_name} #{trip.client.last_name}"
+   puts "Price: #{trip.price_string}"
+   puts "Miles: #{trip.miles}"
+   puts "Number of Passengers: #{trip.num_of_pass}"
+   puts "Pick-Up Time: #{trip.pickup_time}"
+   puts "Pick-Up Location: #{trip.pickup_loc}"
+   puts "Drop-Off Time: #{trip.dropoff_time}"
+   puts "Drop-off Location: #{trip.dropoff_loc}"
   end
-  seperator_and_text {puts "Press return to go back to the main menu:"}
-  gets.strip
-  main_menu
-end
 
-def view_client_template(client)
- seperator_and_text {puts "Client Details (Client ID: #{client.id})"}
- puts "Name: #{client.first_name} #{client.last_name}"
- puts "Company: #{client.company}" if client.company
- puts "Phone Number: #{client.phone}"
- puts "Email Address: #{client.email}"
- puts "Home Address: #{client.address}"
-end
-
-#when 8, list all of the drivers in the database
-def list_drivers
-  Driver.all.each do |driver|
-    view_drivers_template(driver)
+  #when 7, list all of the clients in the database
+  def list_clients
+    Client.all.each do |client|
+      view_client_template(client)
+    end
+    seperator_and_text {puts "Press return to go back to the main menu:".colorize(:green)}
+    gets.strip
+    main_menu
   end
-  seperator_and_text {puts "Press return to go back to the main menu:"}
-  gets.strip
-  main_menu
-end
 
-def view_drivers_template(driver)
- seperator_and_text {puts "Driver Details (Driver ID: #{driver.id})"}
- puts "Name: #{driver.name}"
- puts "Age: #{driver.age}"
- puts "Years of Experience: #{driver.experience}"
- puts "Phone Number: #{driver.phone}"
- puts "Email Address: #{driver.email}"
- puts "Home Address: #{driver.address}"
- puts "License State: #{driver.lic_state}"
- puts "License Number: #{driver.lic_number}"
- puts "License Class: #{driver.lic_class}"
-end
-
-#when 9, list all of the vehicles in the database
-def list_vehicles
-  Vehicle.all.each do |vehicle|
-    view_vehicles_template(vehicle)
+  def view_client_template(client)
+   seperator_and_text {puts "Client Details (Client ID: #{client.id})".colorize(:green)}
+   puts "Name: #{client.first_name} #{client.last_name}"
+   puts "Company: #{client.company}" if client.company
+   puts "Phone Number: #{client.phone}"
+   puts "Email Address: #{client.email}"
+   puts "Home Address: #{client.address}"
   end
-  seperator_and_text {puts "Press return to go back to the main menu:"}
-  gets.strip
-  main_menu
-end
 
-def view_vehicles_template(vehicle)
- seperator_and_text {puts "Vehicle Details (Vehicle ID: #{vehicle.id})"}
- puts "License Plate Number: #{vehicle.lic_plate}"
- puts "Year: #{vehicle.year}"
- puts "Make: #{vehicle.make}"
- puts "Model: #{vehicle.model}"
- puts "Color: #{vehicle.color}"
- puts "Number of Seats: #{vehicle.seats}"
- puts "Current Mileage: #{vehicle.mileage}"
- puts "Type: #{vehicle.type_of_veh}"
- puts "Class: #{vehicle.veh_class}"
-end
+  #when 8, list all of the drivers in the database
+  def list_drivers
+    Driver.all.each do |driver|
+      view_drivers_template(driver)
+    end
+    seperator_and_text {puts "Press return to go back to the main menu:".colorize(:green)}
+    gets.strip
+    main_menu
+  end
+
+  def view_drivers_template(driver)
+   seperator_and_text {puts "Driver Details (Driver ID: #{driver.id})".colorize(:green)}
+   puts "Name: #{driver.name}"
+   puts "Age: #{driver.age}"
+   puts "Years of Experience: #{driver.experience}"
+   puts "Phone Number: #{driver.phone}"
+   puts "Email Address: #{driver.email}"
+   puts "Home Address: #{driver.address}"
+   puts "License State: #{driver.lic_state}"
+   puts "License Number: #{driver.lic_number}"
+   puts "License Class: #{driver.lic_class}"
+  end
+
+  #when 9, list all of the vehicles in the database
+  def list_vehicles
+    Vehicle.all.each do |vehicle|
+      view_vehicles_template(vehicle)
+    end
+    seperator_and_text {puts "Press return to go back to the main menu:".colorize(:green)}
+    gets.strip
+    main_menu
+  end
+
+  def view_vehicles_template(vehicle)
+   seperator_and_text {puts "Vehicle Details (Vehicle ID: #{vehicle.id})".colorize(:green)}
+   puts "License Plate Number: #{vehicle.lic_plate}"
+   puts "Year: #{vehicle.year}"
+   puts "Make: #{vehicle.make}"
+   puts "Model: #{vehicle.model}"
+   puts "Color: #{vehicle.color}"
+   puts "Number of Seats: #{vehicle.seats}"
+   puts "Current Mileage: #{vehicle.mileage}"
+   puts "Type: #{vehicle.type_of_veh}"
+   puts "Class: #{vehicle.veh_class}"
+ end
 
 
 end
