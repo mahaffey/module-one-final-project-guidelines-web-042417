@@ -9,4 +9,13 @@ module Runner
     puts "Please input the following information:"
     puts "(if information is unavailible simply hit return)"
   end
+
+  def not_valid
+    puts "Invalid Input: "
+    yield
+  end
+
+  def press_return
+    puts "Press return to go back to the main menu:"
+  end
 end

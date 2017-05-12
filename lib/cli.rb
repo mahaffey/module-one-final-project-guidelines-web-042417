@@ -2,7 +2,7 @@ class CLI
   include Runner
 
   def welcome
-    puts "\e[H\e[2J"
+    system("clear")
     puts "Welcome to the cabbie dispatch app 0.2"
     main_menu
   end
@@ -10,7 +10,7 @@ class CLI
   def main_menu
     @trip_switch = 0
     #controls return of options 1 - 2 on creating client and scheduling trip
-    seperator_and_text{puts "What would you like to do? (select 1-3)"}
+    seperator_and_text{puts "What would you like to do? (select 1-6)"}
     puts "1. Create new client"
     puts "2. Schedule a new trip"
     puts "3. Update or View an existing trip"
@@ -34,7 +34,7 @@ class CLI
     when "6"
       exit
     else
-      puts "Invalid Input: Please Enter 1-3"
+      not_valid {print "Please Enter 1-3"}
       main_menu
     end
   end
@@ -61,7 +61,7 @@ class CLI
       puts "New Client ID: #{client_new.id}"
       puts "Client name: #{name}"
       if @trip_switch == 0
-        seperator_and_text {puts "Press return to go back to the main menu:"}
+        seperator_and_text {press_return}
         gets.strip
         main_menu
       end
@@ -88,7 +88,7 @@ class CLI
     new_trip.update(client: client)
     trip_creation_output(new_trip)
     seperator_and_text {puts "To add driver or vehicle now select 'Update or View an existing trip' from the main menu then choose to 'Update an existing trip'"
-    puts "Press return to go back to the main menu:"}
+    press_return}
     gets.strip
     main_menu
   end
@@ -140,7 +140,7 @@ class CLI
   #     puts "New Client ID: #{client_new.id}"
   #     puts "Client name: #{name}"
   #     if @trip_switch == 0
-  #       seperator_and_text {puts "Press return to go back to the main menu:"}
+  #       seperator_and_text {press_return}
   #       gets.strip
   #       main_menu
   #     end
@@ -201,7 +201,7 @@ class CLI
     puts "A new driver has been created"
     puts "New Driver ID: #{new_driver.id}"
     puts "Driver name: #{new_driver.name}"
-    seperator_and_text {puts "Press return to go back to the main menu:"}
+    seperator_and_text {press_return}
     gets.strip
     main_menu
   end
@@ -236,7 +236,7 @@ class CLI
     vehicle_new = get_vehicle_attributes_and_create
     puts "A new vehicle has been added to the garage"
     puts "New Vehicle ID: #{vehicle_new.id}"
-    seperator_and_text {puts "Press return to go back to the main menu:"}
+    seperator_and_text {press_return}
     gets.strip
     main_menu
   end
@@ -278,7 +278,7 @@ class CLI
     when "3"
       main_menu
     else
-      puts "Invalid Input: Please Enter 1-3"
+      not_valid {print "Please Enter 1-3"}
       update_or_view_existing_trip
     end
  end
@@ -323,7 +323,7 @@ class CLI
     when "7"
      update_or_view_existing_trip
     else
-     puts "Invalid Input: Please Enter 1-5"
+     not_valid {print "Please Enter 1-5"}
      update_trip
     end
     Trip.all.where("ID = #{@trip_id}").update(key => val)
@@ -338,7 +338,7 @@ class CLI
    when "n" || "N"
      main_menu
    else
-     puts "Invalid Input: Please Enter y or n"
+     not_valid {print "Please Enter y or n"}
      do_you_want_to_continue_updating_trip
    end
  end
