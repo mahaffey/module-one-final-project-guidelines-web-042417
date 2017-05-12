@@ -11,8 +11,9 @@ module Runner
   end
 
   def not_valid
-    puts "Invalid Input: ".colorize(:red)
+    print "\nInvalid Input: ".colorize(:red)
     yield
+    puts
   end
 
   def press_return
