@@ -1,4 +1,4 @@
-# Cabbie CLI NYC Version 0.2
+# Cabbie CLI NYC Version 1.0
 
 ## Getting Started
 
