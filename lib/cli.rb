@@ -25,8 +25,16 @@ class CLI
     when "2"
       schedule_new_trip
     when "3"
-      seperator_and_text {puts "Enter the trip ID:".colorize(:green)}
+      puts "Current Valid IDs:"
+      seperator_and_text {print Trip.pluck(:id)
+                          puts}
+      puts "Enter Trip ID"
       @trip_id = gets.strip.to_i
+      until Trip.pluck(:id).include?(@trip_id)
+        not_valid {print "Enter Trip ID"
+                   puts}
+        @trip_id = gets.strip.to_i
+      end
       update_or_view_existing_trip
     when "4"
       driver_prompt
@@ -150,7 +158,13 @@ class CLI
       elsif key == :age || key == :experience || key == :lic_number || key == :num_of_pass
         input = gets.strip
         while input.to_i == 0
-          not_valid {print "Please input an integer:".colorize(:red)}
+          not_valid {print "Please input an integer".colorize(:red)}
+          input = gets.strip
+        end
+      elsif key == :pickup_loc || key == :dropoff_loc
+        input = gets.strip
+        while input == ""
+          not_valid {print "Please input a valid location".colorize(:red)}
           input = gets.strip
         end
       else
@@ -163,14 +177,42 @@ class CLI
 
   def time_array
     dt_array = gets.strip.split("-")
-    alpha = ("a".."z").to_a
-    dt_array.each do |n|
-      if n.split("").any? { |x| alpha.include?(x) }
+    numa = ("0".."9").to_a
+    dt_array.each_with_index do |n, index|
+      if !n.split("").all? { |x| numa.include?(x) }
         puts "Input valid time:".colorize(:red)
         time_array
       end
+      n = n.to_i
+      case index
+      when 0
+        if n < 0
+          puts "Input valid time:".colorize(:red)
+          time_array
+        end
+      when 1
+        if n < 1 || n > 12
+          puts "Input valid time:".colorize(:red)
+          time_array
+        end
+      when 2
+        if n < 1 || n > 31
+          puts "Input valid time:".colorize(:red)
+          time_array
+        end
+      when 3
+        if n < 0 || n > 23
+          puts "Input valid time:".colorize(:red)
+          time_array
+        end
+      when 4
+        if n < 0 || n > 59
+          puts "Input valid time:".colorize(:red)
+          time_array
+        end
+      end
+      dt_array[index] = n
     end
-    dt_array = dt_array.collect { |n| n.to_i }
     Time.utc(*dt_array)
   end
 
@@ -315,11 +357,21 @@ class CLI
     when "3"
      key = :pickup_loc
      puts "Enter New Value:"
-     val = gets.strip
+     input = gets.strip
+     while input == ""
+       not_valid {print "Please input a valid location".colorize(:red)}
+       input = gets.strip
+     end
+     val = input
     when "4"
      key = :dropoff_loc
      puts "Enter New Value:"
-     val = gets.strip
+     input = gets.strip
+     while input == ""
+       not_valid {print "Please input a valid location".colorize(:red)}
+       input = gets.strip
+     end
+     val = input
     when "5"
      key = :driver
      puts "Enter Name of Driver"
@@ -328,11 +380,13 @@ class CLI
     when "6"
       key = :vehicle
       puts "Current Valid IDs:"
-      seperator_and_text {puts Vehicle.pluck(:id)}
+      seperator_and_text {print Vehicle.pluck(:id)
+                          puts}
       puts "Enter Vehicle ID"
       input = gets.strip.to_i
       until Vehicle.pluck(:id).include?(input)
-        not_valid {print "Enter Vehicle ID"}
+        not_valid {print "Enter Vehicle ID"
+                   puts}
         input = gets.strip.to_i
       end
       val = Vehicle.find(input)
