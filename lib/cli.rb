@@ -328,9 +328,11 @@ class CLI
     when "6"
       key = :vehicle
       puts "Current Valid IDs:"
-      seperator_and_text {Vehicle.pluck(:id)}
+      seperator_and_text {puts Vehicle.pluck(:id)}
+      puts "Enter Vehicle ID"
+      input = gets.strip.to_i
       until Vehicle.pluck(:id).include?(input)
-        puts "Enter Vehicle ID"
+        not_valid {print "Enter Vehicle ID"}
         input = gets.strip.to_i
       end
       val = Vehicle.find(input)
