@@ -10,17 +10,14 @@ class CLI
   def main_menu
     @trip_switch = 0
     #controls return of options 1 - 2 on creating client and scheduling trip
-    seperator_and_text{puts "What would you like to do? (select 1-6)".colorize(:green)}
+    seperator_and_text{puts "What would you like to do? (select 1-7)".colorize(:green)}
     puts "1. Create new client"
     puts "2. Schedule a new trip"
     puts "3. Update or View an existing trip"
     puts "4. Add new driver to database"
     puts "5. Add new vehicle to database"
-    puts "6. View all trips"
-    puts "7. View all clients"
-    puts "8. View all drivers"
-    puts "9. View all vehicles"
-    puts "10. Quit"
+    puts "6. View information"
+    puts "7. Quit"
 
     case gets.strip
     when "1"
@@ -36,19 +33,55 @@ class CLI
     when "5"
       vehicle_prompt
     when "6"
-      list_trips
+      list_menu
     when "7"
-      list_clients
-    when "8"
-      list_drivers
-    when "9"
-      list_vehicles
-    when "10"
       exit
     else
-      not_valid {print "Please Enter 1-9".colorize(:red)}
+      not_valid {print "Please Enter 1-7".colorize(:red)}
       main_menu
     end
+  end
+
+  def list_menu
+    seperator_and_text{puts "What would you like to list? (select 1-5)".colorize(:green)}
+    puts "1. List all trips"
+    puts "2. List all clients"
+    puts "3. List all drivers"
+    puts "4. List all vehicles"
+    puts "5. Go back to main_menu"
+
+    case gets.strip
+    when "1"
+      list(Trip)
+    when "2"
+      list(Client)
+    when "3"
+      list(Driver)
+    when "4"
+      list(Vehicle)
+    when "5"
+      main_menu
+    else
+      not_valid {print "Please Enter 1-5".colorize(:red)}
+      list_menu
+    end
+  end
+
+  def list(this_class)
+    this_class.all.each do |item|
+      if this_class == Trip
+        view_trip_template(item)
+      elsif this_class == Client
+        view_client_template(item)
+      elsif this_class == Driver
+         view_drivers_template(item)
+      elsif this_class == Vehicle
+        view_vehicles_template(item)
+      end
+    end
+    seperator_and_text {puts "Press return to go back to the main menu:".colorize(:green)}
+    gets.strip
+    main_menu
   end
 
   #when 1 or 2 check client when creating a client of trip
@@ -165,7 +198,8 @@ class CLI
      when "1"
        update_trip
      when "2"
-       view_trip
+       view_trip_template(Trip.find(@trip_id))
+       update_or_view_existing_trip
      when "3"
        main_menu
      else
@@ -232,12 +266,6 @@ class CLI
       puts "Invalid Input: Please Enter y or n".colorize(:red)
       do_you_want_to_continue_updating_trip
     end
-  end
-
-  def view_trip
-   trip = Trip.find(@trip_id)
-   view_trip_template(trip)
-   update_or_view_existing_trip
   end
 
   #when 4, add a new driver to the database
@@ -311,24 +339,6 @@ class CLI
     end
     Vehicle.create(attributes)
  end
-
- def update_or_view_existing_trip
-    seperator_and_text {puts "What would you like to do? (select 1-3)"
-                        puts "1. Update an existing trip"
-                        puts "2. View an existing trip"
-                        puts "3. Back to main menu"}
-    case gets.strip
-    when "1"
-      update_trip
-    when "2"
-      view_trip
-    when "3"
-      main_menu
-    else
-      not_valid {print "Please Enter 1-3"}
-      update_or_view_existing_trip
-    end
-  end
 
   #when 6, list all of the trips in the database
   def list_trips
